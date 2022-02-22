@@ -8,7 +8,7 @@ GET http://localhost:8080/hello
      client.log(response.body);
      client.log(JSON.stringify(response.body));
      client.assert(response.status===200,"返回码不是200");
-     client.assert(response.body === "hello world!","结果验证失败");
+     client.assert(response.body === "hello world!Hello","结果验证失败");
  });
  %}
 ###
