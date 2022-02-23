@@ -1,9 +1,14 @@
 package com.huanglulu.wiki.controller;
 
+import com.huanglulu.wiki.domain.Test;
+import com.huanglulu.wiki.service.TestService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 //RestController一般用来返回字符串
 //Controller 用来返回页面
@@ -13,6 +18,8 @@ public class TestController {
     @Value("${test.hello:TEST}")
     private String testHello;
 
+    @Resource
+    private TestService testService;
     /**
      * GET,,POST,PUT,DELETE
      *RequestMapping支持所有
@@ -31,4 +38,10 @@ public class TestController {
     public String helloPost(String name){
         return "hello world! Post,"+name;
     }
+
+    @GetMapping("/test/list")
+    public List<Test> list(){
+        return testService.list();
+    }
+
 }
