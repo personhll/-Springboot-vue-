@@ -1,4 +1,6 @@
 <template>
+
+  <a-button type="danger">Danger</a-button>
   <div class="home">
     <a-button type="danger">
       Danger
