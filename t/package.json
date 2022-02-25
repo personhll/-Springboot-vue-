@@ -5,7 +5,7 @@
   "scripts": {
     "serve-dev": "vue-cli-service serve --mode dev --port 8080",
     "serve-prod": "vue-cli-service serve --mode prod",
-    "build-dev": "vue-cli-service build --mode dev",
+    "build-dev": "vue-cli-service build --mode dev --port 8080",
     "build-prod": "vue-cli-service build --mode prod",
     "lint": "vue-cli-service lint"
   },
