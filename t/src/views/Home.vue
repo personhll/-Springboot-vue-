@@ -14,19 +14,19 @@
 import { defineComponent ,onMounted,ref,reactive,toRef} from 'vue';
 import axios from 'axios';
 
-const listData: any = [];
-
-for (let i = 0; i < 23; i++) {
-    listData.push({
-        href: 'https://www.antdv.com/',
-        title: `ant design vue part ${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        description:
-            'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-        content:
-            'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-}
+// const listData: any = [];
+//
+// for (let i = 0; i < 23; i++) {
+//     listData.push({
+//         href: 'https://www.antdv.com/',
+//         title: `ant design vue part ${i}`,
+//         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+//         description:
+//             'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+//         content:
+//             'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+//     });
+// }
 
 export default defineComponent({
   name: 'Home',
@@ -38,7 +38,7 @@ export default defineComponent({
       onMounted(()=>{
           console.log("onMounted");
           // function (response) {}相当于(response)=> {}
-          axios.get("http://localhost:8080/ebook/list?name=Spring").then((response)=> {
+          axios.get("http://localhost:8080/ebook/list").then((response)=> {
               const data = response.data;
               ebooks.value = data.content;
               ebook1.books =data.content;
@@ -48,7 +48,7 @@ export default defineComponent({
       return {
           ebooks,
           ebook2:toRef(ebook1,"books"),
-          listData,
+          //listData,
           pagination:{
               onChange: (page: any)=> {
                   console.log(page);
@@ -64,3 +64,14 @@ export default defineComponent({
    }
 });
 </script>
+
+<!--只在当前页面生效-->
+<style scoped>
+    .ant-avatar {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 8%;
+        margin: 5px 0;
+    }
+</style>

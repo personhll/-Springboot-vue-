@@ -7,6 +7,7 @@ import com.huanglulu.wiki.req.EbookReq;
 import com.huanglulu.wiki.resp.EbookResp;
 import com.huanglulu.wiki.util.CopyUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,7 +22,10 @@ public class EbookService {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         //模糊查询
-        criteria.andNameLike("%"+req.getName()+"%");
+        //只能根据内容查找criteria.andNameLike("%"+req.getName()+"%");
+        if(!ObjectUtils.isEmpty(req.getName())){
+            criteria.andNameLike("%"+req.getName()+"%");
+        }
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         //列表复制
