@@ -1,24 +1,17 @@
 package com.huanglulu.wiki.config;
 
-import com.huanglulu.wiki.interceptor.LogInterceptor;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.annotation.Resource;
-
-@Configuration
-public class SpringMvcConfig implements WebMvcConfigurer {
-
-    @Resource
-    LogInterceptor logInterceptor;
+//@Configuration
+//public class SpringMvcConfig implements WebMvcConfigurer {
+//
+//    @Resource
+//    LogInterceptor logInterceptor;
 //    @Resource
 //    LoginInterceptor loginInterceptor;
 //
 //    @Resource
 //    ActionInterceptor actionInterceptor;
 
-    public void addInterceptors(InterceptorRegistry registry) {
+//    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(loginInterceptor)
 //                .addPathPatterns("/**")
 //                .excludePathPatterns(
@@ -39,7 +32,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 //                        "/*/delete/**",
 //                        "/*/reset-password");
 
-        registry.addInterceptor(logInterceptor)
-                .addPathPatterns("/**").excludePathPatterns("login");
-    }
-}
+//        registry.addInterceptor(logInterceptor)
+//                .addPathPatterns("/**").excludePathPatterns("login");
+//    }
+//}
