@@ -16,7 +16,7 @@
                 </template>
                 <template v-slot:action="{ text, record }">
                     <a-space size="small">
-                        <a-button type="primary">
+                        <a-button type="primary" @click="edit">
                             编辑
                         </a-button>
                         <a-button type="danger">
@@ -27,6 +27,15 @@
             </a-table>
         </a-layout-content>
     </a-layout>
+
+    <a-modal
+            title="电子书表单"
+            v-model:visible="modalVisible"
+            :confirm-loading="modalLoading"
+            @ok="handleModalOk"
+    >
+        <p>test</p>
+    </a-modal>
 </template>
 
 <script lang="ts">
@@ -117,6 +126,53 @@
           })
         };
 
+
+          // -------- 表单 ---------
+          /**
+           * 数组，[100, 101]对应：前端开发 / Vue
+           */
+          // const categoryIds = ref();
+          // const ebook = ref();
+          const modalVisible = ref(false);
+          const modalLoading = ref(false);
+          const handleModalOk = () => {
+              modalLoading.value = true;
+              // ebook.value.category1Id = categoryIds.value[0];
+              // ebook.value.category2Id = categoryIds.value[1];
+              // axios.post("/ebook/save", ebook.value).then((response) => {
+              //     modalLoading.value = false;
+              //     const data = response.data; // data = commonResp
+              //     if (data.success) {
+              //         modalVisible.value = false;
+              setTimeout(() => {
+                  modalVisible.value = false;
+                  modalLoading.value = false;
+              }, 2000)
+
+
+              //         // 重新加载列表
+              //         handleQuery({
+              //             page: pagination.value.current,
+              //             size: pagination.value.pageSize,
+              //         });
+              //     } else {
+              //         message.error(data.message);
+              //     }
+              // });
+          };
+
+          /**
+           * 编辑
+           */
+          const edit = () => {
+              modalVisible.value = true;
+          }
+          // const edit = (record: any) => {
+          //     modalVisible.value = true;
+          //     ebook.value = Tool.copy(record);
+          //     categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
+          // };
+
         onMounted(()=>{
           handleQuery({
             page: 1,
@@ -129,7 +185,12 @@
             pagination,
             columns,
             loading,
-            handleTableChange
+            handleTableChange,
+            edit,
+
+            modalVisible,
+            modalLoading,
+            handleModalOk
           };
         },
     });
