@@ -32,21 +32,27 @@ export default defineComponent({
   name: 'Home',
   setup(){
       console.log("setup");
+
       //ref()响应式数据
       const ebooks = ref();
       const ebook1= reactive({books:[]});
+
       onMounted(()=>{
-          console.log("onMounted1234");
           // function (response) {}相当于(response)=> {}
-          axios.get("/ebook/list").then((response)=> {
+          axios.get("/ebook/list",{
+              params:{
+                  page: 1,
+                  size:1000
+              }
+          }).then((response)=> {
               const data = response.data;
-              ebooks.value = data.content;
-              ebook1.books =data.content;
+              ebooks.value = data.content.list;
+              //ebook1.books =data.content;
           });
       });
       return {
           ebooks,
-          ebook2:toRef(ebook1,"books"),
+          //ebook2:toRef(ebook1,"books"),
           //listData,
           pagination:{
               onChange: (page: any)=> {
