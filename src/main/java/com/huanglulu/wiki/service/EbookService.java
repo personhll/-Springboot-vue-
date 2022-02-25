@@ -1,11 +1,15 @@
 package com.huanglulu.wiki.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huanglulu.wiki.domain.Ebook;
 import com.huanglulu.wiki.domain.EbookExample;
 import com.huanglulu.wiki.mapper.EbookMapper;
 import com.huanglulu.wiki.req.EbookReq;
 import com.huanglulu.wiki.resp.EbookResp;
 import com.huanglulu.wiki.util.CopyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -14,6 +18,8 @@ import java.util.List;
 
 @Service
 public class EbookService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
     @Resource
     private EbookMapper ebookMapper;
@@ -26,7 +32,15 @@ public class EbookService {
         if(!ObjectUtils.isEmpty(req.getName())){
             criteria.andNameLike("%"+req.getName()+"%");
         }
+        //分页最基本数据：两个请求参数：pageNum，pageSize，两个返回参数：ebookList，getTotal（）
+        PageHelper.startPage( 1, 3);
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+
+        PageInfo<Ebook>pageInfo = new PageInfo<>(ebookList);
+        LOG.info("总行数：{}"+pageInfo.getTotal());
+        LOG.info("总页数：{}"+pageInfo.getPages());
+
+
 
         //列表复制
         List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
