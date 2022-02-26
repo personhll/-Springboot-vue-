@@ -37,4 +37,13 @@ public class EbookController {
         return resp;
     }
 
+    @DeleteMapping("/delete/{id}")
+    public CommonResp delete(@PathVariable Long id){
+
+        //在Commonresp里放一些前端需要的通用属性
+        CommonResp resp = new CommonResp<>();
+        ebookService.delete(id);
+        return resp;
+    }
+
 }

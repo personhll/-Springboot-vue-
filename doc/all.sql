@@ -39,5 +39,6 @@ insert into `ebook` (id, name, description) values (3, 'Python 入门教程', '�
 insert into `ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
 insert into `ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
 
+delete from `ebook` where category1_id=33;
 
 update `ebook` set cover='/image/cover2.png' ,name='Vue 入门教程',description='零基础入门 Vue 开发，企业级应用开发最佳首选框架' where id=2;
