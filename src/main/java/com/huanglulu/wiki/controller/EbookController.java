@@ -30,7 +30,7 @@ public class EbookController {
     }
 
     @PostMapping("/save")
-    public CommonResp save(@RequestBody EbookSaveReq req){
+    public CommonResp save(@Valid @RequestBody EbookSaveReq req){
 
         //在Commonresp里放一些前端需要的通用属性
         CommonResp resp = new CommonResp<>();

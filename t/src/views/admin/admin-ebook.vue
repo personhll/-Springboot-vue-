@@ -84,7 +84,7 @@
         const ebooks = ref();
         const pagination = ref({
           current: 1,
-          pageSize: 1001,
+          pageSize: 10,
           total: 0
         });
         const loading = ref(false);
@@ -179,13 +179,14 @@
               // ebook.value.category1Id = categoryIds.value[0];
               // ebook.value.category2Id = categoryIds.value[1];
               // axios.post("/ebook/save", ebook.value).then((response) => {
-              //     modalLoading.value = false;
+              //
               //     const data = response.data; // data = commonResp
               //     if (data.success) {
               //         modalVisible.value = false;
 
 
               axios.post("/ebook/save",ebook.value).then((response) => {
+                  modalLoading.value = false;
                   const data = response.data;
                   if(data.success){
                       modalVisible.value = false;
@@ -196,11 +197,11 @@
                           page: pagination.value.current,
                           size: pagination.value.pageSize,
                       });
+                  }else {
+                      message.error(data.message);
                   }
               });
               //
-              //     } else {
-              //         message.error(data.message);
               //     }
               // });
           };
