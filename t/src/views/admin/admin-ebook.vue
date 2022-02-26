@@ -3,6 +3,11 @@
         <a-layout-content
                 :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
+            <p>
+                <a-button type="primary" @click="add()" size="large">
+                    新增
+                </a-button>
+            </p>
             <a-table
                     :columns="columns"
                     :row-key="record=>record.id"
@@ -78,8 +83,8 @@
 
         const columns = [
           {
-            dataIndex: '封面',
-            key: 'cover',
+            title: '封面',
+            dataIndex: 'cover',
             slots: {customRender: 'cover'},
           },
           {
@@ -88,15 +93,15 @@
           },
             {
                 title: '分类一',
-                //key: "category1Id",
+                // key: "category1Id",
                 dataIndex: 'category1Id',
-                // slots: { customRender: 'name'}
+                // slots: { customRender: 'category1Id'}
             },
             {
                 title: '分类二',
-                //key: "category2Id",
+                // key: "category2Id",
                 dataIndex: 'category2Id',
-                // slots: { customRender: 'name'}
+                // slots: { customRender: 'category1Id'}
             },
             {
                 title: '文档数',
@@ -198,6 +203,15 @@
               //categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
           };
 
+          /**
+           * 新增
+           */
+          const add = () => {
+              modalVisible.value = true;
+              ebook.value = {};//Tool.copy(record);
+              //categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
+          };
+
         onMounted(()=>{
           handleQuery({
             page: 1,
@@ -211,9 +225,11 @@
               columns,
               loading,
               handleTableChange,
-              edit,
-              ebook,
 
+              edit,
+              add,
+
+              ebook,
               modalVisible,
               modalLoading,
               handleModalOk
