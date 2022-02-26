@@ -90,6 +90,7 @@
   import {defineComponent, onMounted, ref} from 'vue';
   import axios from 'axios';
   import { message } from "ant-design-vue";
+  import {Tool} from "@/util/tool";
 
   export default defineComponent({
     name: 'AdminEbook',
@@ -196,11 +197,7 @@
               modalLoading.value = true;
               // ebook.value.category1Id = categoryIds.value[0];
               // ebook.value.category2Id = categoryIds.value[1];
-              // axios.post("/ebook/save", ebook.value).then((response) => {
-              //
-              //     const data = response.data; // data = commonResp
-              //     if (data.success) {
-              //         modalVisible.value = false;
+
 
 
               axios.post("/ebook/save",ebook.value).then((response) => {
@@ -229,7 +226,7 @@
            */
           const edit = (record: any) => {
               modalVisible.value = true;
-              ebook.value = record//Tool.copy(record);
+              ebook.value = Tool.copy(record);
               //categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
           };
 
