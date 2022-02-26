@@ -1,6 +1,6 @@
-package com.huanglulu.wiki.resp;
+package com.huanglulu.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;

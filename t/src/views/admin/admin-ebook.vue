@@ -41,12 +41,18 @@
             <a-form-item label="名称">
                 <a-input v-model:value="ebook.name" />
             </a-form-item>
-            <a-form-item label="分类">
-                <a-cascader
-                        v-model:value="categoryIds"
-                        :field-names="{ label: 'name', value: 'id', children: 'children' }"
-                        :options="level1"
-                />
+<!--            <a-form-item label="分类">-->
+<!--                <a-cascader-->
+<!--                        v-model:value="categoryIds"-->
+<!--                        :field-names="{ label: 'name', value: 'id', children: 'children' }"-->
+<!--                        :options="level1"-->
+<!--                />-->
+<!--            </a-form-item>-->
+            <a-form-item label="分类一">
+                <a-input v-model:value="ebook.category1Id" />
+            </a-form-item>
+            <a-form-item label="分类二">
+                <a-input v-model:value="ebook.category2Id" />
             </a-form-item>
             <a-form-item label="描述">
                 <a-input v-model:value="ebook.description" type="textarea" />
@@ -82,14 +88,14 @@
           },
             {
                 title: '分类一',
-                key: "category1Id",
-                // dataIndex: 'category1Id',
+                //key: "category1Id",
+                dataIndex: 'category1Id',
                 // slots: { customRender: 'name'}
             },
             {
                 title: '分类二',
-                key: "category2Id",
-                // dataIndex: 'category2Id',
+                //key: "category2Id",
+                dataIndex: 'category2Id',
                 // slots: { customRender: 'name'}
             },
             {
@@ -161,17 +167,22 @@
               //     const data = response.data; // data = commonResp
               //     if (data.success) {
               //         modalVisible.value = false;
-              setTimeout(() => {
-                  modalVisible.value = false;
-                  modalLoading.value = false;
-              }, 2000)
 
 
-              //         // 重新加载列表
-              //         handleQuery({
-              //             page: pagination.value.current,
-              //             size: pagination.value.pageSize,
-              //         });
+              axios.post("/ebook/save",ebook.value).then((response) => {
+                  const data = response.data;
+                  if(data.success){
+                      modalVisible.value = false;
+                      modalLoading.value = false;
+
+                      // 重新加载列表
+                      handleQuery({
+                          page: pagination.value.current,
+                          size: pagination.value.pageSize,
+                      });
+                  }
+              });
+              //
               //     } else {
               //         message.error(data.message);
               //     }
