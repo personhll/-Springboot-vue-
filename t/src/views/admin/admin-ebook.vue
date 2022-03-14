@@ -140,6 +140,7 @@
          */
         const handleQuery = (params: any) => {
           loading.value = true;
+          ebooks.value = [];
           axios.get("/ebook/list",{
             params: {
                 //参数传递过来的
