@@ -13,6 +13,8 @@
 <script lang="ts">
 import { defineComponent ,onMounted,ref,reactive,toRef} from 'vue';
 import axios from 'axios';
+import { message } from "ant-design-vue";
+import {Tool} from "@/util/tool";
 
 // const listData: any = [];
 //
@@ -31,14 +33,38 @@ import axios from 'axios';
 export default defineComponent({
   name: 'Home',
   setup(){
-      console.log("setup");
-
-      //ref()响应式数据
       const ebooks = ref();
-      const ebook1= reactive({books:[]});
+
+      const  level1 = ref();
+      let categorys: any;
+
+      /**
+       * 查询所有分类
+       */
+      const handleQueryCategory = () => {
+          axios.get("/category/all").then((response) => {
+              const data = response.data;
+              if(data.success){
+                  categorys = data.content;
+                  console.log("原始数据：",categorys);
+
+                  level1.value = [];
+                  level1.value = Tool.array2Tree(categorys,0);
+                  console.log("树形结构：",level1.value);
+              }else{
+                  message.error(data.message);
+              }
+          });
+      };
+
+      const handleClick = () =>{
+          console.log("menu click")
+      };
 
       onMounted(()=>{
           // function (response) {}相当于(response)=> {}
+
+          handleQueryCategory();
           axios.get("/ebook/list",{
               params:{
                   page: 1,
@@ -65,6 +91,8 @@ export default defineComponent({
           { type: 'LikeOutlined', text: '156' },
           { type: 'MessageOutlined', text: '2' },
       ],
+          handleClick,
+          level1,
       }
    }
 });
