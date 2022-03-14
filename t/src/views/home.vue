@@ -57,8 +57,16 @@ export default defineComponent({
           });
       };
 
-      const handleClick = () =>{
-          console.log("menu click")
+      const isShowWelcome = ref(true);
+
+      const handleClick = (value: any) =>{
+          console.log("menu click",value);
+          isShowWelcome.value = value.key === 'welcome';
+          // if(value.key === 'welcome'){
+          //     isShowWelcome.value = true;
+          // }else {
+          //     isShowWelcome.value = false;
+          // }
       };
 
       onMounted(()=>{
@@ -93,6 +101,8 @@ export default defineComponent({
       ],
           handleClick,
           level1,
+
+          isShowWelcome,
       }
    }
 });
