@@ -2,14 +2,15 @@ package com.huanglulu.wiki.controller;
 
 import com.huanglulu.wiki.req.CategoryQueryReq;
 import com.huanglulu.wiki.req.CategorySaveReq;
-import com.huanglulu.wiki.resp.CommonResp;
 import com.huanglulu.wiki.resp.CategoryQueryResp;
+import com.huanglulu.wiki.resp.CommonResp;
 import com.huanglulu.wiki.resp.PageResp;
 import com.huanglulu.wiki.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -25,6 +26,15 @@ public class CategoryController {
         //在Commonresp里放一些前端需要的通用属性
         CommonResp<PageResp<CategoryQueryResp>>resp = new CommonResp<>();
         PageResp<CategoryQueryResp> list = categoryService.list(req);
+        resp.setContent(list);
+        return resp;
+    }
+    @GetMapping("/all")
+    public CommonResp all(){
+
+        //在Commonresp里放一些前端需要的通用属性
+        CommonResp<List<CategoryQueryResp>>resp = new CommonResp<>();
+        List<CategoryQueryResp> list = categoryService.all();
         resp.setContent(list);
         return resp;
     }

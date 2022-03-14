@@ -32,6 +32,7 @@ public class CategoryService {
 
     public PageResp<CategoryQueryResp> list(CategoryQueryReq req){
         CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
 
         //分页最基本数据：两个请求参数：pageNum，pageSize，两个返回参数：categoryList，getTotal（）
@@ -45,17 +46,22 @@ public class CategoryService {
 
         //列表复制
         List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
-//        List<CategoryResp> respList = new ArrayList<>();
-//        for (Category category : categoryList) {
-//            //从category拷贝到categoryResp，（对象的复制）
-//            CategoryResp copyResp = CopyUtil.copy(category, CategoryResp.class);
-//            respList.add(categoryResp);
-//        }
        PageResp<CategoryQueryResp> pageResp = new PageResp();
        pageResp.setTotal(pageInfo.getTotal());
        pageResp.setList(list);
        return pageResp;
     }
+
+    public List<CategoryQueryResp> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        //列表复制
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);
+
+        return list;
+    }
+
 
     /**
      * 保存
