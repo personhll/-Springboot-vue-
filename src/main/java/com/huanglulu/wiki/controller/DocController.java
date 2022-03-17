@@ -2,14 +2,15 @@ package com.huanglulu.wiki.controller;
 
 import com.huanglulu.wiki.req.DocQueryReq;
 import com.huanglulu.wiki.req.DocSaveReq;
-import com.huanglulu.wiki.resp.DocQueryResp;
 import com.huanglulu.wiki.resp.CommonResp;
+import com.huanglulu.wiki.resp.DocQueryResp;
 import com.huanglulu.wiki.resp.PageResp;
 import com.huanglulu.wiki.service.DocService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -48,12 +49,13 @@ public class DocController {
         return resp;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public CommonResp delete(@PathVariable Long id){
+    @DeleteMapping("/delete/{idsStr}")
+    public CommonResp delete(@PathVariable String idsStr){
 
         //在Commonresp里放一些前端需要的通用属性
         CommonResp resp = new CommonResp<>();
-        docService.delete(id);
+        List<String> list = Arrays.asList(idsStr.split(","));
+        docService.delete(list);
         return resp;
     }
 
