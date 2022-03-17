@@ -78,11 +78,12 @@
 </template>
 
 <script lang="ts">
-  import {defineComponent, onMounted, ref} from 'vue';
+  import {defineComponent, onMounted, ref,createVNode} from 'vue';
   import axios from 'axios';
-  import { message } from "ant-design-vue";
+  import { message,Modal } from "ant-design-vue";
   import {Tool} from "@/util/tool";
   import {useRoute} from "vue-router";
+  import {ExclamationCircleOutlined} from "@ant-design/icons-vue/lib";
 
   export default defineComponent({
     name: 'AdminDoc',
@@ -225,7 +226,10 @@
               }
           };
 
-          const ids :Array<String>= [];
+
+
+          const deleteIds: Array<string> = [];
+          const deleteNames: Array<string> = [];
           /**
            * 查找整根树枝
            */
@@ -236,9 +240,11 @@
                   const node = treeSelectData[i];
                   if (node.id === id) {
                       // 如果当前节点就是目标节点
-                      console.log("disabled", node);
+                      console.log("delete", node);
                       // 将目标ID放入结果集ids
-                      ids.push(id);
+                      deleteIds.push(id);
+                      deleteNames.push(node.name);
+
                       const children = node.children;
                       if (Tool.isNotEmpty(children)) {
                           for (let j = 0; j < children.length; j++) {
@@ -284,14 +290,27 @@
           };
 
           const handleDelete = (id: number) =>{
-              getDeleteIds(level1.value,id);
-              console.log(ids);
-              axios.delete("/doc/delete/"+ids.join(",")).then((response) => {
-                  const data = response.data;
-                  if(data.success){
-                      // 重新加载列表
-                      handleQuery();
-                  }
+              // console.log(level1, level1.value, id)
+              // 清空数组，否则多次删除时，数组会一直增加
+              deleteIds.length = 0;
+              deleteNames.length = 0;
+              getDeleteIds(level1.value, id);
+              Modal.confirm({
+                  title: '重要提醒',
+                  icon: createVNode(ExclamationCircleOutlined),
+                  content: '将删除：【' + deleteNames.join("，") + "】删除后不可恢复，确认删除？",
+                  onOk() {
+                      // console.log(ids)
+                      axios.delete("/doc/delete/" + deleteIds.join(",")).then((response) => {
+                          const data = response.data; // data = commonResp
+                          if (data.success) {
+                              // 重新加载列表
+                              handleQuery();
+                          } else {
+                              message.error(data.message);
+                          }
+                      });
+                  },
               });
           };
 
