@@ -180,6 +180,8 @@
           const treeSelectData = ref();
           treeSelectData.value = [];
           const doc = ref();
+          doc.value={}
+
           const modalVisible = ref(false);
           const modalLoading = ref(false);
           const editor = new E('#content');
@@ -335,6 +337,7 @@
           };
 
         onMounted(()=>{
+          editor.create();
           handleQuery();
         });
 
