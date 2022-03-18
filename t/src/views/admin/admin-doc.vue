@@ -3,7 +3,7 @@
         <a-layout-content
                 :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
-            <a-row>
+            <a-row :gutter="24">
                 <a-col :span="8">
                     <p>
                         <a-form layout="inline" :model="param">
@@ -25,13 +25,14 @@
                             :data-source="level1"
                             :loading="loading"
                             :pagination="false"
+                            size="small"
                     >
-                        <template #cover="{ text: cover }">
-                            <img v-if="cover" :src="cover" alt="avatar"/>
+                        <template #name="{ text, record }">
+                            {{record.sort}}{{text}}
                         </template>
                         <template v-slot:action="{ text, record }">
                             <a-space size="small">
-                                <a-button type="primary" @click="edit(record)">
+                                <a-button type="primary" @click="edit(record)" size = "small">
                                     编辑
                                 </a-button>
                                 <a-popconfirm
@@ -40,7 +41,7 @@
                                         cancel-text="否"
                                         @confirm="handleDelete(record.id)"
                                 >
-                                    <a-button type="danger">
+                                    <a-button type="danger" size = "small">
                                         删除
                                     </a-button>
                                 </a-popconfirm>
@@ -117,16 +118,7 @@
           {
             title: '名称',
             dataIndex: 'name',
-          },
-          {
-                title: '父文档',
-                key: "parent",
-                dataIndex: 'parent',
-                // slots: { customRender: 'doc1Id'}
-          },
-          {
-                title: '顺序',
-                dataIndex: 'sort',
+            slots:{ customRender: 'name'}
           },
           {
                 title: 'Action',
@@ -179,14 +171,14 @@
         //因为树选择主键的属性状态，会随当前编辑的节点而变化，所以单独声明一个响应式变量
           const treeSelectData = ref();
           treeSelectData.value = [];
-          const doc = ref();
-          doc.value={}
+          const doc = ref({});
 
           const modalVisible = ref(false);
           const modalLoading = ref(false);
           const editor = new E('#content');
+          editor.config.zIndex = 0;
 
-          const handleModalOk = () => {
+          const handleSave = () => {
               modalLoading.value = true;
               // doc.value.doc1Id = docIds.value[0];
               // doc.value.doc2Id = docIds.value[1];
@@ -288,9 +280,6 @@
 
               //为选择添加一个“无”
               treeSelectData.value.unshift({id: 0,name: '无'});
-              setTimeout(function () {
-                  editor.create();
-              },100);
           };
 
           /**
@@ -306,9 +295,6 @@
 
               //为选择添加一个“无”
               treeSelectData.value.unshift({id: 0,name: '无'});
-              setTimeout(function () {
-                  editor.create();
-              },100);
           };
 
           const handleDelete = (id: number) =>{
@@ -337,8 +323,9 @@
           };
 
         onMounted(()=>{
-          editor.create();
           handleQuery();
+
+          editor.create();
         });
 
           return {
@@ -354,7 +341,7 @@
               doc,
               modalVisible,
               modalLoading,
-              handleModalOk,
+              handleSave,
 
               handleDelete,
 
