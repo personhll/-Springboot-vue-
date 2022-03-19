@@ -59,7 +59,6 @@
           const data = response.data;
           if(data.success){
             docs.value = data.content;
-
             level1.value = [];
             level1.value = Tool.array2Tree(docs.value,0);
           }else{
