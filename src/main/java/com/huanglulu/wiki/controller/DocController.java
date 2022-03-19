@@ -31,12 +31,12 @@ public class DocController {
         return resp;
     }
 
-    @GetMapping("/all")
-    public CommonResp all(){
+    @GetMapping("/all/{ebookId}")
+    public CommonResp all(@PathVariable Long ebookId){
 
         //在Commonresp里放一些前端需要的通用属性
         CommonResp<List<DocQueryResp>>resp = new CommonResp<>();
-        List<DocQueryResp> list = docService.all();
+        List<DocQueryResp> list = docService.all(ebookId);
         resp.setContent(list);
         return resp;
     }
