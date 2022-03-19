@@ -99,6 +99,7 @@
   import {useRoute} from "vue-router";
   import {ExclamationCircleOutlined} from "@ant-design/icons-vue/lib";
   import E from 'wangeditor'
+  import text from "wangeditor/src/config/text";
 
   export default defineComponent({
     name: 'AdminDoc',
@@ -166,7 +167,7 @@
           });
         }
 
-          // -------- 表单 ---------
+          // -------- 表单 ---------//
           /**
            * 数组，[100, 101]对应：前端开发 / Vue
            */
@@ -271,12 +272,29 @@
                   }
               }
           };
+
+
+          /**
+           *内容查询
+           */
+          const handleQueryContent= () => {
+              axios.get("/doc/find-content/"+doc.value.id).then((response) => {
+                  const data = response.data;
+                  if(data.success){
+                      editor.txt.html(data.content);
+                  }else{
+                      message.error(data.message);
+                  }
+              });
+          }
+
           /**
            * 编辑
            */
           const edit = (record: any) => {
               modalVisible.value = true;
               doc.value = Tool.copy(record);
+              handleQueryContent();
               //docIds.value = [doc.value.doc1Id, doc.value.doc2Id]
               //不能选择当前节点及其所有子孙节点，作为父节点，会使树断开
               treeSelectData.value = Tool.copy(level1.value);

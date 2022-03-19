@@ -30,6 +30,7 @@ public class DocController {
         resp.setContent(list);
         return resp;
     }
+
     @GetMapping("/all")
     public CommonResp all(){
 
@@ -58,5 +59,16 @@ public class DocController {
         docService.delete(list);
         return resp;
     }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id){
+
+        //在Commonresp里放一些前端需要的通用属性
+        CommonResp<String>resp = new CommonResp<>();
+        String content = docService.findContent(id);
+        resp.setContent(content);
+        return resp;
+    }
+
 
 }
