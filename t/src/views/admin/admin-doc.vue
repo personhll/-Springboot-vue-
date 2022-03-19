@@ -174,8 +174,8 @@
         //因为树选择主键的属性状态，会随当前编辑的节点而变化，所以单独声明一个响应式变量
           const treeSelectData = ref();
           treeSelectData.value = [];
-          const doc = ref({});
-
+          const doc = ref();
+          doc.value = {}
           const modalVisible = ref(false);
           const modalLoading = ref(false);
           const editor = new E('#content');
@@ -183,6 +183,7 @@
 
           const handleSave = () => {
               modalLoading.value = true;
+              doc.value.content = editor.txt.html();
               // doc.value.doc1Id = docIds.value[0];
               // doc.value.doc2Id = docIds.value[1];
 
