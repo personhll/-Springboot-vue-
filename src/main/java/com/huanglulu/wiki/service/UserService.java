@@ -8,6 +8,7 @@ import com.huanglulu.wiki.exception.BusinessException;
 import com.huanglulu.wiki.exception.BusinessExceptionCode;
 import com.huanglulu.wiki.mapper.UserMapper;
 import com.huanglulu.wiki.req.UserQueryReq;
+import com.huanglulu.wiki.req.UserResetPasswordReq;
 import com.huanglulu.wiki.req.UserSaveReq;
 import com.huanglulu.wiki.resp.PageResp;
 import com.huanglulu.wiki.resp.UserQueryResp;
@@ -116,6 +117,11 @@ public class UserService {
         }else{
             return userList.get(0);
         }
+    }
+
+    public void resetPassword(UserResetPasswordReq req){
+        User user = CopyUtil.copy(req,User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
 }

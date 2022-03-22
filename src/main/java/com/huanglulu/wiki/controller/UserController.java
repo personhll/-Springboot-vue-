@@ -1,10 +1,11 @@
 package com.huanglulu.wiki.controller;
 
 import com.huanglulu.wiki.req.UserQueryReq;
+import com.huanglulu.wiki.req.UserResetPasswordReq;
 import com.huanglulu.wiki.req.UserSaveReq;
 import com.huanglulu.wiki.resp.CommonResp;
-import com.huanglulu.wiki.resp.UserQueryResp;
 import com.huanglulu.wiki.resp.PageResp;
+import com.huanglulu.wiki.resp.UserQueryResp;
 import com.huanglulu.wiki.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,15 @@ public class UserController {
         //在Commonresp里放一些前端需要的通用属性
         CommonResp resp = new CommonResp<>();
         userService.delete(id);
+        return resp;
+    }
+
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req){
+
+        //在Commonresp里放一些前端需要的通用属性
+        CommonResp resp = new CommonResp<>();
+        userService.resetPassword(req);
         return resp;
     }
 
