@@ -7,13 +7,15 @@
             <a-tree
               v-if="level1.length > 0"
               :tree-data="level1"
-              @select="onselect"
-              :replaceField="{title: 'name',key: 'id', value: 'id'}"
+              @select="onSelect"
+              :replaceFields="{title: 'name', key: 'id', value: 'id'}"
               :defaultExpandAll="true"
+              :defaultSelectedKeys="defaultSelectedKeys"
               >
             </a-tree>
           </a-col>
           <a-col :span="18">
+            <div class="wangeditor" :innerHTML="html"></div>
           </a-col>
         </a-row>
       </div>
@@ -30,13 +32,16 @@
   import {ExclamationCircleOutlined} from "@ant-design/icons-vue/lib";
   import E from 'wangeditor'
   import text from "wangeditor/src/config/text";
-
   export default defineComponent({
     name: 'Doc',
     setup() {
       const route = useRoute();
       const docs = ref();
-
+      const html = ref();
+      const defaultSelectedKeys = ref();
+      defaultSelectedKeys.value = [];
+      const doc = ref();
+      doc.value = {};
       /**
        * 一级文档树，children属性就是二级文档
        * [{
@@ -51,6 +56,19 @@
       const  level1 = ref();//一级文档树，children就是二级文档属性
       level1.value = [];
 
+        /**
+         * 内容查询
+         **/
+        const handleQueryContent = (id: number) => {
+            axios.get("/doc/find-content/" + id).then((response) => {
+                const data = response.data;
+                if (data.success) {
+                    html.value = data.content;
+                } else {
+                    message.error(data.message);
+                }
+            });
+        };
       /**
        * 数据查询
        */
@@ -61,21 +79,60 @@
             docs.value = data.content;
             level1.value = [];
             level1.value = Tool.array2Tree(docs.value,0);
+            doc.value = level1.value[0];
           }else{
             message.error(data.message);
           }
         });
-      }
+      };
 
+      const onSelect = (selectedKeys: any, info: any) => {
+        console.log('selected', selectedKeys, info);
+        if(Tool.isNotEmpty(selectedKeys)){
+          //加载内容
+          handleQueryContent(selectedKeys[0]);
+        }
+      }
 
       onMounted(()=>{
         handleQuery();
-
       });
 
       return {
         level1,
+        html,
+
+        onSelect,
       };
     },
   });
 </script>
+
+<style>
+  .wangeditor table {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+  .wangeditor table td,
+  .wangeditor table th {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 3px 5px;
+  }
+  .wangeditor table th {
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+  }
+
+  /* blockquote 样式 */
+  blockquote {
+    display: block;
+    border-left: 8px solid #d0e5f2;
+    padding: 5px 10px;
+    margin: 10px 0;
+    line-height: 1.4;
+    font-size: 100%;
+    background-color: #f1f1f1;
+  }
+
+</style>
