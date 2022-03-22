@@ -348,6 +348,19 @@
               });
           };
 
+          //---------------------富文本预览-------------------
+          const drawerVisible = ref(false);
+          const previewHtml = ref();
+          const handlePreviewContent = () => {
+              const html = editor.txt.html();
+              previewHtml.value = html;
+              drawerVisible.value = true;
+          };
+
+          const onDrawerClose = () => {
+              drawerVisible.value = false;
+          };
+
         onMounted(()=>{
           handleQuery();
 
@@ -371,7 +384,12 @@
 
               handleDelete,
 
-              treeSelectData
+              treeSelectData,
+
+              drawerVisible,
+              previewHtml,
+              handlePreviewContent,
+              onDrawerClose,
           };
         },
     });
