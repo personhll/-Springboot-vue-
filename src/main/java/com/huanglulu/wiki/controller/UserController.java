@@ -7,6 +7,7 @@ import com.huanglulu.wiki.resp.CommonResp;
 import com.huanglulu.wiki.resp.PageResp;
 import com.huanglulu.wiki.resp.UserQueryResp;
 import com.huanglulu.wiki.service.UserService;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,7 +33,7 @@ public class UserController {
 
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody UserSaveReq req){
-
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         //在Commonresp里放一些前端需要的通用属性
         CommonResp resp = new CommonResp<>();
         userService.save(req);

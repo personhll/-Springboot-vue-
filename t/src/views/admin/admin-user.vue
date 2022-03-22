@@ -174,6 +174,8 @@
             const handleModalOk = () => {
                 modalLoading.value = true;
 
+                user.value.password = hexMd5(user.value.password + KEY);
+
                 axios.post("/user/save",user.value).then((response) => {
                     modalLoading.value = false;
                     const data = response.data;
