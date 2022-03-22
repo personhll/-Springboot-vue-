@@ -79,6 +79,11 @@
             docs.value = data.content;
             level1.value = [];
             level1.value = Tool.array2Tree(docs.value,0);
+
+            if(Tool.isNotEmpty(level1)){
+                defaultSelectedKeys.value = [level1.value[0].id];
+                handleQueryContent(level1.value[0].id);
+            }
             doc.value = level1.value[0];
           }else{
             message.error(data.message);
@@ -99,10 +104,11 @@
       });
 
       return {
-        level1,
-        html,
+          level1,
+          html,
 
-        onSelect,
+          onSelect,
+          defaultSelectedKeys,
       };
     },
   });
