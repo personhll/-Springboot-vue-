@@ -4,16 +4,19 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huanglulu.wiki.domain.User;
 import com.huanglulu.wiki.domain.UserExample;
+import com.huanglulu.wiki.exception.BusinessException;
+import com.huanglulu.wiki.exception.BusinessExceptionCode;
 import com.huanglulu.wiki.mapper.UserMapper;
 import com.huanglulu.wiki.req.UserQueryReq;
 import com.huanglulu.wiki.req.UserSaveReq;
-import com.huanglulu.wiki.resp.UserQueryResp;
 import com.huanglulu.wiki.resp.PageResp;
+import com.huanglulu.wiki.resp.UserQueryResp;
 import com.huanglulu.wiki.util.CopyUtil;
 import com.huanglulu.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -33,13 +36,10 @@ public class UserService {
     public PageResp<UserQueryResp> list(UserQueryReq req){
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        //模糊查询
-        //只能根据内容查找criteria.andNameLike("%"+req.getName()+"%");
         if(!ObjectUtils.isEmpty(req.getLoginName())){
             criteria.andLoginNameEqualTo(req.getLoginName());
         }
 
-        //分页最基本数据：两个请求参数：pageNum，pageSize，两个返回参数：userList，getTotal（）
         PageHelper.startPage( req.getPage(), req.getSize());
         List<User> userList = userMapper.selectByExample(userExample);
 
@@ -70,9 +70,21 @@ public class UserService {
     public void save(UserSaveReq req){
         User user = CopyUtil.copy(req,User.class);
         if(ObjectUtils.isEmpty(req.getId())){
-            //新增
-            user.setId(snowFlake.nextId());
-            userMapper.insert(user);
+            User userDB = selectByLoginName(req.getLoginName());
+            if(ObjectUtils.isEmpty(userDB)){
+                //新增
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            }else{
+                //用户名已存在
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+//                try {
+//                    throw new Exception("用户名已存在");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+            }
         }else{
             //更新
             userMapper.updateByPrimaryKey(user);
@@ -86,4 +98,22 @@ public class UserService {
     public void delete(Long id){
         userMapper.deleteByPrimaryKey(id);
     }
+
+    /**
+     * 通过用户名搜索
+     * @param loginName
+     * @return
+     */
+    public User selectByLoginName(String loginName){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if(CollectionUtils.isEmpty(userList)){
+            return null;
+        }else{
+            return userList.get(0);
+        }
+    }
+
 }
