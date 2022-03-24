@@ -1,5 +1,11 @@
 <template>
     <a-layout-header class="header">
+        <a class="login-menu" v-show="user.id">
+            <span>您好：{{user.name}}</span>
+        </a>
+        <a class="login-menu" v-show="!user.id" @click="showLoginModal">
+            <span>登录</span>
+        </a>
         <div class="logo"></div>
         <a-menu
                 theme="dark"
@@ -21,12 +27,7 @@
             <a-menu-item key="/about">
                 <router-link to="/about">关于我们</router-link>
             </a-menu-item>
-            <a class="login-menu" v-show="user.id">
-                <span>您好：{{user.name}}</span>
-            </a>
-            <a class="login-menu" v-show="!user.id" @click="showLoginModal" >
-                <span>登录</span>
-            </a>
+
         </a-menu>
         <a-modal
                 title="登录"
@@ -51,6 +52,7 @@
     import { defineComponent, ref, computed } from 'vue';
     import axios from 'axios';
     import { message } from 'ant-design-vue';
+    import store from "@/store";
 
     declare let hexMd5: any;
     declare let KEY: any;
@@ -85,9 +87,7 @@
                         loginModalVisible.value = false;
                         user.value = data.content;
                         message.success("登录成功！");
-
-                        console.log("登录成功")
-                        // store.commit("setUser", data.content);
+                        store.commit("setUser", user.value);
                     } else {
                         message.error(data.message);
                     }
