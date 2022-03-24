@@ -27,7 +27,6 @@
             <a-menu-item key="/about">
                 <router-link to="/about">关于我们</router-link>
             </a-menu-item>
-
         </a-menu>
         <a-modal
                 title="登录"
@@ -61,8 +60,8 @@
         name: 'the-header',
         setup() {
             //登录后保存
-            const user = ref();
-            user.value= {};
+            const user = computed(() => store.state.user);
+
 
             //登录
             const loginUser = ref({
@@ -85,7 +84,6 @@
                     const data = response.data;
                     if (data.success) {
                         loginModalVisible.value = false;
-                        user.value = data.content;
                         message.success("登录成功！");
                         store.commit("setUser", user.value);
                     } else {
