@@ -10,6 +10,7 @@ const store = createStore({
   //同步
   mutations: {
     setUser (state, user){
+      console.log("store user: ",user);
       state.user = user;
       SessionStorage.set(USER,user);
     }
