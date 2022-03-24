@@ -1,12 +1,11 @@
 <template>
     <a-layout-header class="header">
-        <div class="logo" />
+        <div class="logo"></div>
         <a-menu
                 theme="dark"
                 mode="horizontal"
                 :style="{ lineHeight: '64px' }"
         >
-
             <a-menu-item key="/">
                 <router-link to="/">首页</router-link>
             </a-menu-item>
@@ -22,33 +21,34 @@
             <a-menu-item key="/about">
                 <router-link to="/about">关于我们</router-link>
             </a-menu-item>
-            <a class="login-menu" @click="showLoginModal">
+            <a class="login-menu" v-show="user.id">
+                <span>您好：{{user.name}}</span>
+            </a>
+            <a class="login-menu" v-show="!user.id" @click="showLoginModal" >
                 <span>登录</span>
             </a>
         </a-menu>
-
         <a-modal
-            title="登录"
-            v-model:visible="loginModalVisible"
-            :confirm-loading="loginModalLoading"
-            @ok="login"
+                title="登录"
+                v-model:visible="loginModalVisible"
+                :confirm-loading="loginModalLoading"
+                @ok="login"
         >
             <a-form :model="loginUser" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
                 <a-form-item label="登录名">
                     <a-input v-model:value="loginUser.loginName" />
                 </a-form-item>
-                <a-form-item label="密码" >
-                    <a-input v-model:value="loginUser.password" type="password"/>
+                <a-form-item label="密码">
+                    <a-input v-model:value="loginUser.password" type="password" />
                 </a-form-item>
             </a-form>
         </a-modal>
     </a-layout-header>
-
-
 </template>
 
+
 <script lang="ts">
-    import { defineComponent, ref } from 'vue';
+    import { defineComponent, ref, computed } from 'vue';
     import axios from 'axios';
     import { message } from 'ant-design-vue';
 
@@ -58,9 +58,14 @@
     export default defineComponent({
         name: 'the-header',
         setup() {
+            //登录后保存
+            const user = ref();
+            user.value= {};
+
+            //登录
             const loginUser = ref({
                 loginName: "test",
-                password:"test"
+                password:"test123"
             });
             const loginModalVisible = ref(false);
             const loginModalLoading = ref(false);
@@ -68,9 +73,9 @@
                 loginModalVisible.value = true;
             };
 
-            //登录
+            // 登录
             const login = () => {
-                console.log("开始登录")
+                console.log("开始登录");
                 loginModalLoading.value = true;
                 loginUser.value.password = hexMd5(loginUser.value.password + KEY);
                 axios.post('/user/login', loginUser.value).then((response) => {
@@ -78,8 +83,11 @@
                     const data = response.data;
                     if (data.success) {
                         loginModalVisible.value = false;
+                        user.value = data.content;
                         message.success("登录成功！");
 
+                        console.log("登录成功")
+                        // store.commit("setUser", data.content);
                     } else {
                         message.error(data.message);
                     }
@@ -91,7 +99,9 @@
                 loginModalLoading,
                 showLoginModal,
                 loginUser,
-                login
+                login,
+
+                user
             }
         }
     });
@@ -101,5 +111,6 @@
     .login-menu {
         float: right;
         color: white;
+        width: 100px;
     }
 </style>

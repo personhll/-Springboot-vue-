@@ -7,7 +7,9 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+    import { defineComponent, ref, computed } from 'vue';
+    import axios from 'axios';
+    import { message } from 'ant-design-vue';
     import TheHeader from '@/components/the-header.vue';
     import TheFooter from '@/components/the-footer.vue';
 
@@ -21,20 +23,22 @@
 </script>
 
 <style>
-  #components-layout-demo-top-side-2 .logo {
-    float: left;
-    width: 120px;
-    height: 31px;
-    margin: 16px 28px 16px 0;
-    background: rgba(255, 255, 255, 0.3);
-  }
+    #components-layout-demo-top-side-2 .logo {
+        float: left;
+        width: 120px;
+        height: 31px;
+        margin: 16px 28px 16px 0;
+        background: rgba(255, 255, 255, 0.3);
+    }
 
-  .ant-row-rtl #components-layout-demo-top-side-2 .logo {
-    float: right;
-    margin: 16px 0 16px 24px;
-  }
+    .ant-row-rtl #components-layout-demo-top-side-2 .logo {
+        float: right;
+        margin: 16px 0 16px 24px;
+    }
 
-  .site-layout-background {
-    background: #fff;
-  }
+    .site-layout-background {
+        background: #fff;
+    }
+
+
 </style>
