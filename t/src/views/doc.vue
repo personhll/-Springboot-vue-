@@ -24,6 +24,11 @@
               <a-divider style="height: 2px; background-color: #9999cc"/>
             </div>
             <div class="wangeditor" :innerHTML="html"></div>
+              <div class="vote-div">
+                  <a-button type="primary" shape="round" :size="'large'" @click="vote">
+                      <template #icon><LikeOutlined />&nbsp; 点赞：{{doc.voteCount}}</template>
+                  </a-button>
+              </div>
           </a-col>
         </a-row>
     </a-layout-content>
@@ -111,6 +116,18 @@
         }
       };
 
+      //点赞
+        const vote = () => {
+            axios.get('/doc/vote/'+doc.value.id).then((response) => {
+                const data = response.data;
+                if(data.success){
+                    doc.value.voteCount++;
+                }else{
+                    message.error(data.message)
+                }
+            });
+        };
+
       onMounted(()=>{
         handleQuery();
       });
@@ -121,42 +138,47 @@
 
         onSelect,
         defaultSelectedKeys,
-        doc
+        doc,
+        vote
       };
     },
   });
 </script>
 
 <style>
-  .wangeditor table {
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-  }
-  .wangeditor table td,
-  .wangeditor table th {
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    padding: 3px 5px;
-  }
-  .wangeditor table th {
-    border-bottom: 2px solid #ccc;
-    text-align: center;
-  }
+    /*点赞*/
+    .vote-div{
+        padding: 15px;
+        text-align: center;
+    }
+    .wangeditor table {
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+    }
+    .wangeditor table td, .wangeditor table th {
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        padding: 3px 5px;
+    }
+    .wangeditor table th {
+        border-bottom: 2px solid #ccc;
+        text-align: center;
+    }
 
-  /* blockquote 样式 */
-  blockquote {
-    display: block;
-    border-left: 8px solid #d0e5f2;
-    padding: 5px 10px;
-    margin: 10px 0;
-    line-height: 1.4;
-    font-size: 100%;
-    background-color: #f1f1f1;
-  }
-  /* ul ol 样式 */
-  ul, ol {
-    margin: 10px 0 10px 20px;
-  }
+    /* blockquote 样式 */
+    blockquote {
+        display: block;
+        border-left: 8px solid #d0e5f2;
+        padding: 5px 10px;
+        margin: 10px 0;
+        line-height: 1.4;
+        font-size: 100%;
+        background-color: #f1f1f1;
+    }
+    /* ul ol 样式 */
+    ul, ol {
+        margin: 10px 0 10px 20px;
+    }
 
   /*和antdv p 冲突，覆盖掉*/
   .wangeditor blockquote p{
@@ -165,4 +187,6 @@
     font-size: 16px !important;
     font-weight: 600;
   }
+
+
 </style>

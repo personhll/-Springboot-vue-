@@ -70,5 +70,14 @@ public class DocController {
         return resp;
     }
 
+    @GetMapping("/vote/{id}")
+    public CommonResp vote(@PathVariable Long id){
+
+        //在Commonresp里放一些前端需要的通用属性
+        CommonResp resp = new CommonResp();
+        docService.vote(id);
+        return resp;
+    }
+
 
 }
