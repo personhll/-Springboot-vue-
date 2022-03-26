@@ -18,6 +18,7 @@ import com.huanglulu.wiki.util.CopyUtil;
 import com.huanglulu.wiki.util.RedisUtil;
 import com.huanglulu.wiki.util.RequestContext;
 import com.huanglulu.wiki.util.SnowFlake;
+import com.huanglulu.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,9 @@ public class DocService {
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Resource
+    public WebSocketServer webSocketServer;
 
 
 
@@ -159,6 +163,11 @@ public class DocService {
         }else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        //推送消息
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+        webSocketServer.sendInfo("【"+docDb.getName()+"】被点赞！");
+
     }
 
     public void updateEbookInfo(){
