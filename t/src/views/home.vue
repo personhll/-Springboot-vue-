@@ -15,6 +15,8 @@
     import axios from 'axios';
     import {message} from "ant-design-vue";
     import {Tool} from "@/util/tool";
+    import TheWelcome from '@/components/the-welcome.vue'
+
 
     // const listData: any = [];
     //
@@ -32,6 +34,9 @@
 
     export default defineComponent({
         name: 'Home',
+        components: {
+          TheWelcome
+        },
         setup() {
             const ebooks = ref();
 
