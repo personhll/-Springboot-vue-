@@ -42,7 +42,7 @@
                 //连接错误
                 websocket.onerror = onError;
                 //连接关闭的回调
-                websocket.onclose = onClose;
+                // websocket.onclose = onClose;
             };
 
             onMounted(() => {
