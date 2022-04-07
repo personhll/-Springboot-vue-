@@ -52,9 +52,13 @@ public class CategoryService {
        return pageResp;
     }
 
-    public List<CategoryQueryResp> all(){
+    public List<CategoryQueryResp> all(String name){
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.setOrderByClause("sort asc");
+        CategoryExample.Criteria criteria = categoryExample.createCriteria();
+        if(!ObjectUtils.isEmpty(name)){
+            criteria.andNameLike("%"+name+"%");
+        }
+
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
         //列表复制
         List<CategoryQueryResp> list = CopyUtil.copyList(categoryList, CategoryQueryResp.class);

@@ -5,6 +5,10 @@
         >
             <p>
                 <a-form layout="inline" :model="param">
+                  <a-form-item>
+                    <a-input v-model:value="param.name" placeholder="分类">
+                    </a-input>
+                  </a-form-item>
                     <a-form-item>
                         <a-button type="primary" @click="handleQuery()">
                             查询
@@ -88,6 +92,7 @@
         const param = ref();
         param.value={}
         const categorys = ref();
+        categorys.value = [];
         const loading = ref(false);
 
         const columns = [
@@ -112,17 +117,6 @@
           },
         ];
 
-        /**
-         * 一级分类树，children属性就是二级分类
-         * [{
-         *     id:"",
-         *     name:"",
-         *     children:[{
-         *         id:"",
-         *         name:"",
-         *     }]
-         * }]
-         */
         const  level1 = ref();//一级分类树，children就是二级分类属性
 
         /**
@@ -130,23 +124,28 @@
          */
         const handleQuery = () => {
           loading.value = true;
-          //如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则
-            level1.value =[];
-          axios.get("/category/all").then((response) => {
+          level1.value =[];
+          axios.get("/category/all",{
+            params: {
+              name: param.value.name,
+            }
+          }).then((response) => {
             loading.value = false;
             const data = response.data;
+            console.log(data);
             if(data.success){
+
               categorys.value = data.content;
               console.log("原始数据：",categorys.value);
 
               level1.value = [];
-              level1.value = Tool.array2Tree(categorys.value,0);
+              level1.value =Tool.array2Tree(categorys.value,0);
               console.log("树形结构：",level1);
             }else{
                 message.error(data.message);
             }
           });
-        }
+        };
 
           // -------- 表单 ---------
           /**

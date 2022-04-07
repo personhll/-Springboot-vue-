@@ -157,6 +157,7 @@
           }).then((response) => {
             loading.value = false;
             const data = response.data;
+            console.log(data);
             if(data.success){
               ebooks.value = data.content.list;
                 //重置分页按钮

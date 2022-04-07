@@ -30,11 +30,11 @@ public class CategoryController {
         return resp;
     }
     @GetMapping("/all")
-    public CommonResp all(){
+    public CommonResp all(@Valid String name){
 
         //在Commonresp里放一些前端需要的通用属性
         CommonResp<List<CategoryQueryResp>>resp = new CommonResp<>();
-        List<CategoryQueryResp> list = categoryService.all();
+        List<CategoryQueryResp> list = categoryService.all(name);
         resp.setContent(list);
         return resp;
     }
